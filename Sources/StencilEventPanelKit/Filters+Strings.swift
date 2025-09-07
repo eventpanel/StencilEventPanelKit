@@ -31,6 +31,11 @@ public enum SwiftIdentifierModes: String {
   case valid, normal, pretty
 }
 
+/// Possible modes for kotlinIdentifier filter
+public enum KotlinIdentifierModes: String {
+  case valid, normal, pretty
+}
+
 // MARK: - String Filters: Boolean filters
 
 public extension Filters.Strings {
@@ -294,6 +299,33 @@ public extension Filters.Strings {
       string = SwiftIdentifier.identifier(from: string, capitalizeComponents: true, replaceWithUnderscores: true)
       string = try snakeToCamelCase(string, stripLeading: true)
       return SwiftIdentifier.prefixWithUnderscoreIfNeeded(string: string)
+    }
+  }
+
+  /// Converts an arbitrary string to a valid kotlin identifier. Takes an optional Mode argument:
+  ///   - valid: prefix with an underscore if starting with a number, replace invalid characters by underscores
+  ///   - normal (default): uppercase the first character, prefix with an underscore if starting with a number, replace
+  ///     invalid characters by underscores
+  ///   - leading: same as the above, but apply the snakeToCamelCase filter first for a nicer identifier
+  ///
+  /// - Parameters:
+  ///   - value: the value to be processed
+  ///   - arguments: the arguments to the function; expecting zero or one mode argument
+  /// - Returns: the identifier string
+  /// - Throws: FilterError.invalidInputType if the value parameter isn't a string
+  static func kotlinIdentifier(_ value: Any?, arguments: [Any?]) throws -> Any? {
+    var string = try Filters.parseString(from: value)
+    let mode = try Filters.parseEnum(from: arguments, default: KotlinIdentifierModes.normal)
+
+    switch mode {
+    case .valid:
+      return KotlinIdentifier.identifier(from: string, capitalizeComponents: false, replaceWithUnderscores: true)
+    case .normal:
+      return KotlinIdentifier.identifier(from: string, capitalizeComponents: true, replaceWithUnderscores: true)
+    case .pretty:
+      string = KotlinIdentifier.identifier(from: string, capitalizeComponents: true, replaceWithUnderscores: true)
+      string = try snakeToCamelCase(string, stripLeading: true)
+      return KotlinIdentifier.prefixWithUnderscoreIfNeeded(string: string)
     }
   }
 

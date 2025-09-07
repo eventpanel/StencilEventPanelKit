@@ -2,20 +2,20 @@
 import PackageDescription
 
 let package = Package(
-  name: "StencilSwiftKit",
+  name: "StencilEventPanelKit",
   products: [
-    .library(name: "StencilSwiftKit", targets: ["StencilSwiftKit"])
+    .library(name: "StencilEventPanelKit", targets: ["StencilEventPanelKit"])
   ],
   dependencies: [
     .package(url: "https://github.com/shibapm/Komondor.git", .exact("1.1.3")),
     .package(url: "https://github.com/stencilproject/Stencil.git", .upToNextMajor(from: "0.15.0"))
   ],
   targets: [
-    .target(name: "StencilSwiftKit", dependencies: [
+    .target(name: "StencilEventPanelKit", dependencies: [
       "Stencil"
     ]),
-    .testTarget(name: "StencilSwiftKitTests", dependencies: [
-      "StencilSwiftKit"
+    .testTarget(name: "StencilEventPanelKitTests", dependencies: [
+      "StencilEventPanelKit"
     ])
   ],
   swiftLanguageVersions: [.v5]
